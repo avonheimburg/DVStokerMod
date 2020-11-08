@@ -11,7 +11,7 @@
 
         private const float CoalLevelLow = SteamLocoSimulation.COALBOX_OPTIMAL_CAPACITY_KG * 0.25f;
         private const float CoalLevelMed = SteamLocoSimulation.COALBOX_OPTIMAL_CAPACITY_KG * 0.5f;
-        private const float CoalLevelHigh = SteamLocoSimulation.COALBOX_OPTIMAL_CAPACITY_KG;
+        private const float CoalLevelHigh = SteamLocoSimulation.COALBOX_OPTIMAL_CAPACITY_KG - SteamLocoSimulation.COAL_PIECE_KG;
 
         private const float ShovelWaitTime = 0.3f;
 
