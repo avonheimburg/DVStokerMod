@@ -5,18 +5,20 @@
 {
     public class Stoker
     {
-        private const float MinWaterLevel = SteamLocoSimulation.BOILER_WATER_CAPACITY_L * 0.7f;
-        private const float MaxWaterLevel = SteamLocoSimulation.BOILER_WATER_CAPACITY_L * 0.9f;
+        private const float MinWaterLevel = SteamLocoSimulation.BOILER_WATER_CAPACITY_L * 0.6f;
+        private const float MaxWaterLevel = SteamLocoSimulation.BOILER_WATER_CAPACITY_L * 0.8f;
         private const float WaterLevelRange = MaxWaterLevel - MinWaterLevel;
 
-        private const float CoalLevelLow = SteamLocoSimulation.COALBOX_OPTIMAL_CAPACITY_KG * 0.33f;
-        private const float CoalLevelMed = SteamLocoSimulation.COALBOX_OPTIMAL_CAPACITY_KG * 0.67f;
+        private const float CoalLevelLow = SteamLocoSimulation.COALBOX_OPTIMAL_CAPACITY_KG * 0.25f;
+        private const float CoalLevelMed = SteamLocoSimulation.COALBOX_OPTIMAL_CAPACITY_KG * 0.5f;
         private const float CoalLevelHigh = SteamLocoSimulation.COALBOX_OPTIMAL_CAPACITY_KG;
+
+        private const float ShovelWaitTime = 3f;
 
         private StokerMode _mode = StokerMode.Off;
         private float _coalTarget = 0f;
-        
-        
+
+        private float _timeTilNextShovel = 0f;
         
         public StokerMode CycleMode()
         {
@@ -30,6 +32,12 @@
                 _ => throw new ArgumentOutOfRangeException(nameof(_mode))
             };
             return _mode;
+        }
+
+        public void TimeElapsed(float deltaTime)
+        {
+            if (_timeTilNextShovel > 0)
+                _timeTilNextShovel -= deltaTime;
         }
         
         public void SimulateTick(SteamLocoSimulation locoSim)
@@ -51,9 +59,11 @@
             }
             
             // add coal if level is too low
-            if (coalLevel < _coalTarget)
+            // only add a shovel every n seconds
+            if (coalLevel < _coalTarget && _timeTilNextShovel <= 0)
             {
                 locoSim.AddCoalChunk();
+                _timeTilNextShovel = ShovelWaitTime;
             }
 
             var injectorSetting = CalculateInjectorSetting(waterLevel);

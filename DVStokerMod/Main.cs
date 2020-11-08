@@ -108,6 +108,14 @@ namespace DVStokerMod
     [HarmonyPatch(typeof(SteamLocoSimulation), "SimulateTick")]
     class SimulateTickPatch
     {
+        static void Prefix(float delta)
+        {
+            if (Main.Enabled)
+            {
+                Main.Stoker.TimeElapsed(delta);
+            }
+        }
+        
         // ReSharper disable once InconsistentNaming
         static void Postfix(SteamLocoSimulation __instance)
         {
