@@ -9,8 +9,8 @@
         private const float MaxWaterLevel = SteamLocoSimulation.BOILER_WATER_CAPACITY_L * 0.8f;
         private const float WaterLevelRange = MaxWaterLevel - MinWaterLevel;
 
-        private const float CoalLevelLow = SteamLocoSimulation.COALBOX_OPTIMAL_CAPACITY_KG * 0.25f;
-        private const float CoalLevelMed = SteamLocoSimulation.COALBOX_OPTIMAL_CAPACITY_KG * 0.5f;
+        private const float CoalLevelLow = SteamLocoSimulation.COALBOX_OPTIMAL_CAPACITY_KG * 0.33f - SteamLocoSimulation.COAL_PIECE_KG;
+        private const float CoalLevelMed = SteamLocoSimulation.COALBOX_OPTIMAL_CAPACITY_KG * 0.67f - SteamLocoSimulation.COAL_PIECE_KG;
         private const float CoalLevelHigh = SteamLocoSimulation.COALBOX_OPTIMAL_CAPACITY_KG - SteamLocoSimulation.COAL_PIECE_KG;
 
         private const float ShovelWaitTime = 0.3f;
