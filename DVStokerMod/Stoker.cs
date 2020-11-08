@@ -13,11 +13,10 @@
         private const float CoalLevelMed = SteamLocoSimulation.COALBOX_OPTIMAL_CAPACITY_KG * 0.5f;
         private const float CoalLevelHigh = SteamLocoSimulation.COALBOX_OPTIMAL_CAPACITY_KG;
 
-        private const float ShovelWaitTime = 3f;
+        private const float ShovelWaitTime = 0.3f;
 
         private StokerMode _mode = StokerMode.Off;
         private float _coalTarget = 0f;
-
         private float _timeTilNextShovel = 0f;
         
         public StokerMode CycleMode()
@@ -34,6 +33,13 @@
             return _mode;
         }
 
+        public void Reset()
+        {
+            _mode = StokerMode.Off;
+            _coalTarget = 0;
+            _timeTilNextShovel = 0;
+        }
+        
         public void TimeElapsed(float deltaTime)
         {
             if (_timeTilNextShovel > 0)

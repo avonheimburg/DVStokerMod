@@ -4,7 +4,7 @@
         <TargetFramework>net472</TargetFramework>
         <Nullable>enable</Nullable>
         <LangVersion>8</LangVersion>
-        <AssemblyVersion>0.1.4</AssemblyVersion>
+        <AssemblyVersion>0.1.9</AssemblyVersion>
     </PropertyGroup>
 
     <ItemGroup>

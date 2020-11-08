@@ -1,6 +1,5 @@
 using System;
 using System.Reflection;
-using CommandTerminal;
 using HarmonyLib;
 using UnityEngine;
 using UnityModManagerNet;
@@ -62,17 +61,24 @@ namespace DVStokerMod
         {
             if (_settings.StokerMode.Down())
             {
-                var newMode = Stoker.CycleMode();
-                switch (newMode)
+                if (Main.Enabled)
                 {
-                    case StokerMode.Low:
-                    case StokerMode.Medium:
-                    case StokerMode.High:
-                        StatusDisplay?.Show($"Stoker {newMode}");
-                        break;
-                    default:
-                        StatusDisplay?.Show(string.Empty);
-                        break;
+                    var newMode = Stoker.CycleMode();
+                    switch (newMode)
+                    {
+                        case StokerMode.Low:
+                        case StokerMode.Medium:
+                        case StokerMode.High:
+                            StatusDisplay?.Show($"Stoker {newMode}");
+                            break;
+                        default:
+                            StatusDisplay?.Show(string.Empty);
+                            break;
+                    }
+                }
+                else
+                {
+                    StatusDisplay?.Show("");
                 }
             }
         }
@@ -101,16 +107,19 @@ namespace DVStokerMod
         public static bool Toggle(UnityModManager.ModEntry modEntry, bool enabled)
         {
             Main.Enabled = enabled;
+            Main.Stoker.Reset();
+            if (!enabled)
+                StatusDisplay?.Show("");
             return true;
         }
     }
 
     [HarmonyPatch(typeof(SteamLocoSimulation), "SimulateTick")]
-    class SimulateTickPatch
+    class SteamLocoSimulationSimulateTickPatch
     {
         static void Prefix(float delta)
         {
-            if (Main.Enabled)
+            if (Main.Enabled && delta > 0)
             {
                 Main.Stoker.TimeElapsed(delta);
             }
