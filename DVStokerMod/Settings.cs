@@ -11,6 +11,8 @@ namespace DVStokerMod
             keyCode = KeyCode.Semicolon
         };
 
+        [Draw("Log", DrawType.Toggle)]
+        public bool Logging = false;
 
         public void OnChange()
         {

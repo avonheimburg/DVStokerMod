@@ -1,45 +1,52 @@
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 using CommandTerminal;
-using Harmony12;
+using HarmonyLib;
 using UnityModManagerNet;
 
 namespace DVStokerMod
 {
+    [EnableReloading]
     public static class Main
     {
-        private static HarmonyInstance? _harmonyInstance = null;
+        private static Harmony? _harmonyInstance;
 
-        public static bool Enabled;
+        public static bool Enabled = true;
 
         private static Settings _settings = new Settings();
 
         public static readonly Stoker Stoker = new Stoker();
-
-        private static HarmonyInstance HarmonyInstance =>
-            _harmonyInstance ??= HarmonyInstance.Create(nameof(DVStokerMod));
+        
+        private static Harmony HarmonyInstance =>
+            _harmonyInstance ??= new Harmony(nameof(DVStokerMod));
 
         public static bool Load(UnityModManager.ModEntry modEntry)
         {
-            try { _settings = UnityModManager.ModSettings.Load<Settings>(modEntry); } catch {}
+            try
+            {
+                _settings = UnityModManager.ModSettings.Load<Settings>(modEntry);
+                HarmonyInstance.PatchAll(Assembly.GetExecutingAssembly());
+                modEntry.OnToggle = Toggle;
+                modEntry.OnUnload = Unload;
+                modEntry.OnGUI = OnGui;
+                modEntry.OnSaveGUI = OnSaveGui;
+                modEntry.OnUpdate = OnUpdate;
+            }
+            catch (Exception exc)
+            {
+                modEntry.Logger.LogException(exc);
+            }
 
-            HarmonyInstance.PatchAll(Assembly.GetExecutingAssembly());
-            modEntry.OnToggle = Toggle;
-            modEntry.OnUnload = Unload;
-            modEntry.OnGUI = OnGui;
-            modEntry.OnSaveGUI = OnSaveGui;
-            modEntry.OnUpdate = OnUpdate;
-            
-            Terminal.Log("Loaded DVStoker");
-            
             return true;
         }
 
         private static void OnUpdate(UnityModManager.ModEntry modeEntry, float deltaTime)
         {
             if (_settings.StokerMode.Down())
-                Stoker.CycleMode();
+            {
+                var newMode = Stoker.CycleMode();
+                Terminal.Log("Stoker {0}", newMode);
+            }
         }
 
         private static void OnGui(UnityModManager.ModEntry modEntry)
@@ -66,13 +73,14 @@ namespace DVStokerMod
     }
 
     [HarmonyPatch(typeof(SteamLocoSimulation), "SimulateTick")]
-    public static class SimulateTickPatch
+    class SimulateTickPatch
     {
-        public static void Postfix(SteamLocoSimulation instance, float deltaTime)
+        // ReSharper disable once InconsistentNaming
+        static void Postfix(SteamLocoSimulation __instance)
         {
             if (Main.Enabled)
             {
-                Main.Stoker.SimulateTick(instance, deltaTime);
+                Main.Stoker.SimulateTick(__instance);
             }
         } 
     }

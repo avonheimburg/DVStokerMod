@@ -1,7 +1,7 @@
-using CommandTerminal;
-using UnityModManagerNet;
+    using System;
+    using CommandTerminal;
 
-namespace DVStokerMod
+    namespace DVStokerMod
 {
     public class Stoker
     {
@@ -18,7 +18,7 @@ namespace DVStokerMod
         
         
         
-        public void CycleMode()
+        public StokerMode CycleMode()
         {
             _mode = (StokerMode) (((int) _mode + 1) % 4);
             _coalTarget = _mode switch
@@ -26,12 +26,13 @@ namespace DVStokerMod
                 StokerMode.Off => 0,
                 StokerMode.Low => CoalLevelLow,
                 StokerMode.Medium => CoalLevelMed,
-                StokerMode.High => CoalLevelHigh
+                StokerMode.High => CoalLevelHigh,
+                _ => throw new ArgumentOutOfRangeException(nameof(_mode))
             };
-            Terminal.Log("DVStoker Mode: {0}", _mode.ToString());
+            return _mode;
         }
         
-        public void SimulateTick(SteamLocoSimulation locoSim, float deltaTime)
+        public void SimulateTick(SteamLocoSimulation locoSim)
         {
             if (_mode == StokerMode.Off || locoSim == null)
                 return;
@@ -51,10 +52,12 @@ namespace DVStokerMod
             
             // add coal if level is too low
             if (coalLevel < _coalTarget)
+            {
                 locoSim.AddCoalChunk();
+            }
 
             var injectorSetting = CalculateInjectorSetting(waterLevel);
-            locoSim.injector.SetNextValue(injectorSetting);
+            locoSim.injector.SetValue(injectorSetting);
         }
 
         private float CalculateInjectorSetting(float waterLevel)
