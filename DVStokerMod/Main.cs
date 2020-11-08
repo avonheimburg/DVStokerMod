@@ -2,7 +2,9 @@ using System;
 using System.Reflection;
 using CommandTerminal;
 using HarmonyLib;
+using UnityEngine;
 using UnityModManagerNet;
+using Object = UnityEngine.Object;
 
 namespace DVStokerMod
 {
@@ -16,6 +18,10 @@ namespace DVStokerMod
         private static Settings _settings = new Settings();
 
         public static readonly Stoker Stoker = new Stoker();
+
+        public static GameObject? BehaviourRoot;
+
+        public static StatusDisplay? StatusDisplay;
         
         private static Harmony HarmonyInstance =>
             _harmonyInstance ??= new Harmony(nameof(DVStokerMod));
@@ -31,6 +37,11 @@ namespace DVStokerMod
                 modEntry.OnGUI = OnGui;
                 modEntry.OnSaveGUI = OnSaveGui;
                 modEntry.OnUpdate = OnUpdate;
+                
+                if (SaveLoadController.carsAndJobsLoadingFinished && WorldStreamingInit.IsLoaded)
+                    OnLoadFinished();
+                else
+                    WorldStreamingInit.LoadingFinished += OnLoadFinished;
             }
             catch (Exception exc)
             {
@@ -40,12 +51,29 @@ namespace DVStokerMod
             return true;
         }
 
+        private static void OnLoadFinished()
+        {
+            BehaviourRoot = new GameObject();
+            BehaviourRoot.AddComponent<StatusDisplay>();
+            StatusDisplay = BehaviourRoot.GetComponent<StatusDisplay>() ?? throw new ArgumentException("StatusDisplay not instantiated");
+        }
+
         private static void OnUpdate(UnityModManager.ModEntry modeEntry, float deltaTime)
         {
             if (_settings.StokerMode.Down())
             {
                 var newMode = Stoker.CycleMode();
-                Terminal.Log("Stoker {0}", newMode);
+                switch (newMode)
+                {
+                    case StokerMode.Low:
+                    case StokerMode.Medium:
+                    case StokerMode.High:
+                        StatusDisplay?.Show($"Stoker {newMode}");
+                        break;
+                    default:
+                        StatusDisplay?.Show(string.Empty);
+                        break;
+                }
             }
         }
 
@@ -62,6 +90,11 @@ namespace DVStokerMod
         public static bool Unload(UnityModManager.ModEntry modEntry)
         {
             HarmonyInstance.UnpatchAll(nameof(DVStokerMod));
+            
+            if (BehaviourRoot != null)
+                Object.Destroy(BehaviourRoot);
+            BehaviourRoot = null;
+            
             return true;
         }
 
