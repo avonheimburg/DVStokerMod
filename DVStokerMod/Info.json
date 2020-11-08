@@ -1,9 +1,10 @@
 ﻿{
   "Id": "DVStokerMod",
-  "DisplayName": "Derail Valley Stoker Mod",
+  "DisplayName": "Automatic Stoker",
   "Author": "Anno von Heimburg",
-  "Version": "0.1.0",
+  "Version": "0.1.9",
   "ManagerVersion": "0.22.0",
   "AssemblyName": "DVStokerMod.dll",
-  "EntryMethod": "DVStokerMod.Main.Load"
+  "EntryMethod": "DVStokerMod.Main.Load",
+  "HomePage": "https://www.nexusmods.com/derailvalley/mods/237/"
 }
