@@ -1,0 +1,9 @@
+﻿{
+  "Id": "DVStokerMod",
+  "DisplayName": "Derail Valley Stoker Mod",
+  "Author": "Anno von Heimburg",
+  "Version": "0.1.0",
+  "ManagerVersion": "1.0.0",
+  "AssemblyName": "DVStokerMod.dll",
+  "EntryMethod": "DVStokerMod.Main.Load"
+}
