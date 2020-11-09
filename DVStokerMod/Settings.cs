@@ -16,9 +16,8 @@ namespace DVStokerMod
         {
             keyCode = KeyCode.Colon
         };
-        public void OnChange()
-        {
-            // 
-        }
+        public void OnChange() { }
+        
+        public override void Save(UnityModManager.ModEntry modEntry) => Save<Settings>(this, modEntry);
     }
 }
