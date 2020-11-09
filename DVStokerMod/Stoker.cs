@@ -21,7 +21,10 @@
         
         public StokerMode CycleMode(int step = 1)
         {
-            _mode = (StokerMode) (((int) _mode + step) % 4);
+            var newMode = (int) _mode + step;
+            _mode = newMode >= 0
+                ? (StokerMode) (newMode % 4)
+                : (StokerMode) ((newMode + 4) % 4);
             _coalTarget = _mode switch
             {
                 StokerMode.Off => 0,
