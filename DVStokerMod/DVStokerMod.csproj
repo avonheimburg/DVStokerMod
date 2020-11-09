@@ -34,4 +34,10 @@
             <HintPath>D:\Users\anno\SteamLibrary\steamapps\common\Derail Valley\DerailValley_Data\Managed\UnityModManager\UnityModManager.dll</HintPath>
         </Reference>
     </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Info.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
 </Project>
