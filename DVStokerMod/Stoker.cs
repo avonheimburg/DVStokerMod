@@ -19,9 +19,9 @@
         private float _coalTarget = 0f;
         private float _timeTilNextShovel = 0f;
         
-        public StokerMode CycleMode()
+        public StokerMode CycleMode(int step = 1)
         {
-            _mode = (StokerMode) (((int) _mode + 1) % 4);
+            _mode = (StokerMode) (((int) _mode + step) % 4);
             _coalTarget = _mode switch
             {
                 StokerMode.Off => 0,

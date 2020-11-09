@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace DVStokerMod
@@ -16,5 +17,7 @@ namespace DVStokerMod
         {
             _message = message;
         }
+
+        public void Clear() => _message = string.Empty;
     }
 }

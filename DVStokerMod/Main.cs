@@ -59,26 +59,29 @@ namespace DVStokerMod
 
         private static void OnUpdate(UnityModManager.ModEntry modeEntry, float deltaTime)
         {
-            if (_settings.StokerMode.Down())
+            if (Main.Enabled)
             {
-                if (Main.Enabled)
+                StokerMode? newMode = null;
+                if (_settings.StokerUp.Down())
                 {
-                    var newMode = Stoker.CycleMode();
-                    switch (newMode)
-                    {
-                        case StokerMode.Low:
-                        case StokerMode.Medium:
-                        case StokerMode.High:
-                            StatusDisplay?.Show($"Stoker {newMode}");
-                            break;
-                        default:
-                            StatusDisplay?.Show(string.Empty);
-                            break;
-                    }
+                    newMode = Stoker.CycleMode();
+                } else if (_settings.StokerDown.Down())
+                {
+                    newMode = Stoker.CycleMode(-1);
                 }
-                else
+                
+                switch (newMode)
                 {
-                    StatusDisplay?.Show("");
+                    case null:
+                        break;
+                    case StokerMode.Low:
+                    case StokerMode.Medium:
+                    case StokerMode.High:
+                        StatusDisplay?.Show($"Stoker {newMode}");
+                        break;
+                    default:
+                        StatusDisplay?.Clear();
+                        break;
                 }
             }
         }
@@ -95,11 +98,14 @@ namespace DVStokerMod
 
         public static bool Unload(UnityModManager.ModEntry modEntry)
         {
+            Main.Stoker.Reset();
+            Main.StatusDisplay?.Clear();
             HarmonyInstance.UnpatchAll(nameof(DVStokerMod));
             
             if (BehaviourRoot != null)
                 Object.Destroy(BehaviourRoot);
             BehaviourRoot = null;
+            StatusDisplay = null;
             
             return true;
         }
@@ -109,7 +115,7 @@ namespace DVStokerMod
             Main.Enabled = enabled;
             Main.Stoker.Reset();
             if (!enabled)
-                StatusDisplay?.Show("");
+                StatusDisplay?.Clear();
             return true;
         }
     }

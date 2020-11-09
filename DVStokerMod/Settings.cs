@@ -5,15 +5,17 @@ namespace DVStokerMod
 {
     public class Settings : UnityModManager.ModSettings, IDrawable
     {
-        [Draw("Toggle Stoker Mode", DrawType.KeyBinding)]
-        public KeyBinding StokerMode = new KeyBinding()
+        [Draw("Cycle Stoker Up", DrawType.KeyBinding)]
+        public KeyBinding StokerUp = new KeyBinding()
         {
             keyCode = KeyCode.Semicolon
         };
 
-        [Draw("Log", DrawType.Toggle)]
-        public bool Logging = false;
-
+        [Draw("Cycle Stoker Down", DrawType.KeyBinding)]
+        public KeyBinding StokerDown = new KeyBinding()
+        {
+            keyCode = KeyCode.Colon
+        };
         public void OnChange()
         {
             // 
