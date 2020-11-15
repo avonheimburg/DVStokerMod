@@ -8,13 +8,13 @@ namespace DVStokerMod
         [Draw("Cycle Stoker Up", DrawType.KeyBinding)]
         public KeyBinding StokerUp = new KeyBinding()
         {
-            keyCode = KeyCode.Quote
+            keyCode = KeyCode.RightBracket
         };
 
         [Draw("Cycle Stoker Down", DrawType.KeyBinding)]
         public KeyBinding StokerDown = new KeyBinding()
         {
-            keyCode = KeyCode.Semicolon
+            keyCode = KeyCode.LeftBracket
         };
         public void OnChange() { }
         
