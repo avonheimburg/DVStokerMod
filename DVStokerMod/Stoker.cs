@@ -82,7 +82,7 @@
         private float CalculateInjectorSetting(float waterLevel)
         {
             // fully open injector if water level is below minimum
-            if (waterLevel < MinWaterLevel)
+            if (waterLevel <= MinWaterLevel)
                 return 1.0f;
             // calculate injector setting based on water level 
             if (waterLevel < MaxWaterLevel)
