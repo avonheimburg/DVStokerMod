@@ -76,6 +76,7 @@
             }
 
             var injectorSetting = CalculateInjectorSetting(waterLevel);
+            locoSim.injector.SetNextValue(injectorSetting);
             locoSim.injector.SetValue(injectorSetting);
         }
 
