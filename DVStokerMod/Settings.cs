@@ -18,6 +18,6 @@ namespace DVStokerMod
         };
         public void OnChange() { }
         
-        public override void Save(UnityModManager.ModEntry modEntry) => Save<Settings>(this, modEntry);
+        public override void Save(UnityModManager.ModEntry modEntry) => Save(this, modEntry);
     }
 }

@@ -1,5 +1,4 @@
     using System;
-    using CommandTerminal;
 
     namespace DVStokerMod
 {
@@ -80,7 +79,7 @@
             locoSim.injector.SetValue(injectorSetting);
         }
 
-        private float CalculateInjectorSetting(float waterLevel)
+        private static float CalculateInjectorSetting(float waterLevel)
         {
             // fully open injector if water level is below minimum
             if (waterLevel <= MinWaterLevel)
