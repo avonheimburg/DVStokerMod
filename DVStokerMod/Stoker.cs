@@ -15,8 +15,9 @@
         private const float ShovelWaitTime = 0.3f;
 
         private StokerMode _mode = StokerMode.Off;
-        private float _coalTarget = 0f;
-        private float _timeTilNextShovel = 0f;
+        private bool _turningOff;
+        private float _coalTarget;
+        private float _timeTilNextShovel;
         
         public StokerMode CycleMode(int step = 1)
         {
@@ -24,6 +25,10 @@
             _mode = newMode >= 0
                 ? (StokerMode) (newMode % 4)
                 : (StokerMode) ((newMode + 4) % 4);
+
+            if (_mode == StokerMode.Off)
+                _turningOff = true;
+            
             _coalTarget = _mode switch
             {
                 StokerMode.Off => 0,
@@ -32,6 +37,7 @@
                 StokerMode.High => CoalLevelHigh,
                 _ => throw new ArgumentOutOfRangeException(nameof(_mode))
             };
+
             return _mode;
         }
 
@@ -50,6 +56,14 @@
         
         public void SimulateTick(SteamLocoSimulation locoSim)
         {
+            if (_turningOff)
+            {
+                // reset injector to 0
+                locoSim.injector.SetNextValue(0f);
+                locoSim.injector.SetValue(0f);
+                _turningOff = false;
+            }
+            
             if (_mode == StokerMode.Off || locoSim == null)
                 return;
             
@@ -59,7 +73,7 @@
             
             if (
                 coalLevel == 0 &&       // For some reason, these values are populated with real data only
-                steamPressure == 0 &&   // once every 3 ticks. If they're the values above, then this is
+                steamPressure == 0 &&   // once every 3 ticks. If they're these values above,
                 waterLevel == 14400     // one of those magical skipped ticks. Do nothing.
             )
             {
