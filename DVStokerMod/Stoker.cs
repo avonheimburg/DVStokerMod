@@ -64,7 +64,7 @@
                 _turningOff = false;
             }
             
-            if (_mode == StokerMode.Off || locoSim == null)
+            if (_mode == StokerMode.Off || locoSim == null || locoSim.fireOn.value <= 0.01f)
                 return;
             
             float steamPressure = locoSim.boilerPressure.value;

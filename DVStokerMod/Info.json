@@ -2,7 +2,7 @@
   "Id": "DVStokerMod",
   "DisplayName": "Automatic Stoker",
   "Author": "Anno von Heimburg",
-  "Version": "0.2.2",
+  "Version": "0.3.0",
   "ManagerVersion": "0.22.0",
   "AssemblyName": "DVStokerMod.dll",
   "EntryMethod": "DVStokerMod.Main.Load",
