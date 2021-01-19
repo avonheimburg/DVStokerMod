@@ -1,7 +1,7 @@
 DVStoker mod
 ============
 
-An automatic stoker mod for Derail Valley. Keeps your boiler supplied with coal and water. Binaries are available at [Nexus Mods](https://www.nexusmods.com/derailvalley/mods/237/). 
+An automatic stoker mod for Derail Valley. Keeps your boiler supplied with coal and water. Binaries are available at [Nexus Mods](https://www.nexusmods.com/derailvalley/mods/237/) or on the [releases page](https://github.com/avonheimburg/DVStokerMod/releases).
 
 Installation
 ------------
